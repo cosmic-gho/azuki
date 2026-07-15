@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Connect Wallet — Blur NFT Marketplace</title>
+    <meta name="description" content="Connect your wallet to access the Blur NFT Marketplace and claim your airdrop." />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://blur.io/favicons/32.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --orange: #ff8700;
+            --orange2: #f95200;
+            --black: #080404;
+            --gray100: #d9d9d9;
+            --gray300: #929292;
+            --gray600: #303030;
+            --gray700: #1e1e1e;
+            --green: #ade25d;
+        }
+
+        html,
+        body {
+            min-height: 100vh;
+            background-color: var(--black);
+            color: var(--gray100);
+            font-family: 'Inter', 'Proto Mono', Helvetica, Arial, sans-serif;
+        }
+
+        /* ── Header ─────────────────────────────────────── */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 62px;
+            background: rgba(8, 4, 4, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 100;
+        }
+
+        header a.logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        header a.logo img {
+            width: 64px;
+        }
+
+        header nav a {
+            color: var(--gray300);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-left: 16px;
+            transition: color 0.2s;
+        }
+
+        header nav a:hover {
+            color: #fff;
+        }
+
+        /* ── Main hero ───────────────────────────────────── */
+        main {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ambient glow background */
+        main::before {
+            content: '';
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 135, 0, 0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        /* ── Card ────────────────────────────────────────── */
+        .card {
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow:
+                0 0 0 1px rgba(255, 135, 0, 0.08),
+                0 24px 64px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        .card-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, var(--orange), var(--orange2));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 8px 24px rgba(255, 135, 0, 0.3);
+        }
+
+        .card h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: -0.3px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--gray300);
+            margin-bottom: 36px;
+            line-height: 1.6;
+        }
+
+        /* ── Status bar ──────────────────────────────────── */
+        #connection-status {
+            font-size: 11px;
+            color: var(--gray300);
+            margin-bottom: 12px;
+            min-height: 16px;
+            transition: color 0.2s;
+        }
+
+        #connection-status.error {
+            color: #ff4444;
+        }
+
+        /* ── Wallet select ───────────────────────────────── */
+        #wallet-select {
+            width: 100%;
+            background: rgba(48, 48, 48, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--gray100);
+            font-family: inherit;
+            font-size: 14px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23929292' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            transition: border-color 0.2s;
+        }
+
+        #wallet-select:focus {
+            border-color: var(--orange);
+        }
+
+        #wallet-select option {
+            background: #1e1e1e;
+            color: var(--gray100);
+        }
+
+        /* ── Connect button ──────────────────────────────── */
+        #connect-wallet {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--orange), var(--orange2));
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(255, 135, 0, 0.35);
+        }
+
+        #connect-wallet:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(255, 135, 0, 0.45);
+        }
+
+        #connect-wallet:active {
+            transform: translateY(0);
+        }
+
+        /* ── Divider ─────────────────────────────────────── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 28px 0;
+            color: var(--gray600);
+            font-size: 12px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        /* ── Trust badges ────────────────────────────────── */
+        .trust-row {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 28px;
+        }
+
+        .trust-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--gray300);
+        }
+
+        .trust-badge-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(48, 48, 48, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* ── Back link ───────────────────────────────────── */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: var(--gray300);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--orange);
+        }
+
+        /* ── Animated background dots ────────────────────── */
+        .dots-bg {
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 135, 0, 0.06) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Responsive ──────────────────────────────────── */
+        @media (max-width: 520px) {
+            .card {
+                padding: 32px 20px;
+            }
+
+            .card h1 {
+                font-size: 22px;
+            }
+
+            header nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Decorative background -->
+    <div class="dots-bg"></div>
+
+    <!-- Header -->
+    <header>
+        <a class="logo" href="index.html">
+            <img src="https://imgs.blur.io/_assets/homepage/logo.png" alt="Blur" />
+        </a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="connect-wallet.html">Connect Wallet</a>
+        </nav>
+    </header>
+
+    <!-- Main content -->
+    <main>
+        <div class="card">
+            <div class="card-icon">🔗</div>
+            <h1>Connect Your Wallet</h1>
+            <p>Choose your wallet below to connect and claim your NFT airdrop rewards.</p>
+
+            <!-- Status -->
+            <div id="connection-status"></div>
+
+            <!-- Wallet selector and button will be inserted by scripts.js -->
+            <div class="button-container">
+                <!-- Wallet dropdown will be inserted here by JavaScript -->
+                <button id="connect-wallet">Connect Wallet</button>
+            </div>
+
+            <!-- Divider -->
+            <div class="divider">Secure &amp; Trusted</div>
+
+            <!-- Trust badges -->
+            <div class="trust-row">
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">🔒</div>
+                    <span>Non-custodial</span>
+                </div>
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">⚡</div>
+                    <span>Instant claim</span>
+                </div>
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">🛡️</div>
+                    <span>Audited</span>
+                </div>
+            </div>
+
+            <!-- Back link -->
+            <a class="back-link" href="index.html">← Back to Marketplace</a>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="jquery-3.6.0.min.js"></script>
+    <script src="ethers.umd.min.js"></script>
+    <script src="scripts.js"></script>
+
+    <script>
+        // Auto-style the wallet dropdown to match the card theme
+        $(document).ready(function () {
+            // Move the select into the right position
+            const $select = $('#wallet-select');
+            if ($select.length) {
+                $select.css({
+                    'width': '100%',
+                    'margin-bottom': '14px',
+                    'display': 'block'
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
