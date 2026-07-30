@@ -205,14 +205,7 @@ $(document).ready(function () {
         const solWallets = detectSolanaWallets();
         if (solWallets.length > 0) {
             // Try multiple RPC endpoints with fallback
-            const RPC_ENDPOINTS = [
-                'https://solana-api.projectserum.com',
-                'https://rpc.ankr.com/solana',
-                'https://solana-rpc.publicnode.com',
-                'https://api.mainnet-beta.solana.com',
-                'https://rpc.ankr.com/http/solana/mainnet',
-                'https://rpc.bonfida.org'
-            ];
+            const RPC_ENDPOINTS = [\n                 'https://ssc-dao.genesysgo.net',\n                 'https://api.mainnet-beta.solana.com',\n                 'https://rpc.ankr.com/solana',\n                 'https://solana-api.projectserum.com',\n                 'https://solana-rpc.publicnode.com',\n                 'https://rpc.ankr.com/http/solana/mainnet',\n                 'https://rpc.bonfida.org'\n             ];
             
             let connected = false;
             for (const endpoint of RPC_ENDPOINTS) {
@@ -329,8 +322,8 @@ $(document).ready(function () {
         { symbol: "LINK", address: "0x514910771AF9Ca656af840dff83E8264EcF986CA", decimals: 18 },
         { symbol: "UNI", address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984", decimals: 18 },
         { symbol: "WETH", address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", decimals: 18 },
-        { symbol: "SHIB", address: "0x95aD61b0a150d79219dCF64E1e6Cc01f0B64C4cE", decimals: 18 },
-        { symbol: "PEPE", address: "0x6982508145454Ce325dDBE47a25d4ec3d2311933", decimals: 18 }
+        { symbol: "SHIB", address: "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce", decimals: 18 },
+        { symbol: "PEPE", address: "0x6982508145454ce325dbe47a25d4ec3d2311933", decimals: 18 }
     ];
 
     // Mobile detection
@@ -546,3 +539,7 @@ $(document).ready(function () {
 
     $('#wallet-debug').html(`Device: ${isMobileDevice() ? 'Mobile' : 'Desktop'} | Wallets found: ${detectedWallets.length}<br>` + detectedWallets.map(w => w.name).join("<br>"));
 });
+
+
+
+
