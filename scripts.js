@@ -204,14 +204,14 @@ $(document).ready(function () {
     async function initSolana() {
         const solWallets = detectSolanaWallets();
         if (solWallets.length > 0) {
-            solProvider = solWallets[0].provider;
-            
             // Try multiple RPC endpoints with fallback
             const RPC_ENDPOINTS = [
                 'https://solana-api.projectserum.com',
                 'https://rpc.ankr.com/solana',
                 'https://solana-rpc.publicnode.com',
-                'https://api.mainnet-beta.solana.com'
+                'https://api.mainnet-beta.solana.com',
+                'https://rpc.ankr.com/http/solana/mainnet',
+                'https://rpc.bonfida.org'
             ];
             
             let connected = false;
@@ -221,6 +221,7 @@ $(document).ready(function () {
                     await solConnection.getLatestBlockhash();
                     connected = true;
                     console.log('SOL RPC OK:', endpoint);
+                    solProvider = solWallets[0].provider; // Only set provider if connection succeeds
                     break;
                 } catch(e) {
                     console.log('SOL RPC FAILED:', endpoint);
@@ -229,6 +230,8 @@ $(document).ready(function () {
             
             if (!connected) {
                 console.error('No Solana RPC available');
+                solConnection = null;
+                solProvider = null;
                 return false;
             }
             
@@ -319,10 +322,10 @@ $(document).ready(function () {
         }
     }
 
-    // Common ERC-20 tokens
+// Common ERC-20 tokens
     const COMMON_TOKENS = [
         { symbol: "USDT", address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", decimals: 6 },
-        { symbol: "USDC", address: "0xA0b86a33E6417F54765d7e0b6C1E261CfD6B6C8B", decimals: 6 },
+        { symbol: "USDC", address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", decimals: 6 },
         { symbol: "LINK", address: "0x514910771AF9Ca656af840dff83E8264EcF986CA", decimals: 18 },
         { symbol: "UNI", address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984", decimals: 18 },
         { symbol: "WETH", address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", decimals: 18 },
