@@ -232,6 +232,11 @@ $(document).ready(function () {
 }
 
     async function handleSolanaConnection() {
+        const endpoints = [
+        "https://solana-rpc.publicnode.com", // Primary (The winner)
+        "https://rpc.ankr.com/solana",      // Secondary (The backup)
+        "https://solana-api.projectserum.com" // Tertiary
+        ];
     if (!solProvider?.connect) return;
     if (!solConnection) {
         console.error('solConnection not initialized');
