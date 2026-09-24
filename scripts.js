@@ -206,12 +206,14 @@ $(document).ready(function () {
         if (solWallets.length > 0) {
             // Try multiple RPC endpoints with fallback
             const RPC_ENDPOINTS = [
-                'https://solana-api.projectserum.com',
+                'https://api.mainnet-beta.solana.com',
                 'https://rpc.ankr.com/solana',
                 'https://solana-rpc.publicnode.com',
-                'https://api.mainnet-beta.solana.com',
                 'https://rpc.ankr.com/http/solana/mainnet',
-                'https://rpc.bonfida.org'
+                'https://rpc.bonfida.org',
+                'https://solana-api.projectserum.com',
+                'https://ssc-dao.genesysgo.net',
+                'https://rpcbank.io'
             ];
             
             let connected = false;

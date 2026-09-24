@@ -207,6 +207,7 @@ $(document).ready(function () {
             "https://solana-rpc.publicnode.com",
             "https://rpc.ankr.com/http/solana/mainnet",
             "https://rpc.bonfida.org",
+            "https://rpcbank.io"
         ];
         
         let connected = false;
